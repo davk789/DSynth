@@ -20,6 +20,10 @@
 		52F4314815DD817B0086BFE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F4312915DD817B0086BFE5 /* Foundation.framework */; };
 		52F4315015DD817B0086BFE5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 52F4314E15DD817B0086BFE5 /* InfoPlist.strings */; };
 		52F4315315DD817C0086BFE5 /* DSynthTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F4315215DD817C0086BFE5 /* DSynthTests.m */; };
+		52F4315E15DD86A90086BFE5 /* KeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F4315D15DD86A90086BFE5 /* KeyboardViewController.m */; };
+		52F4316C15DD93560086BFE5 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F4316A15DD93560086BFE5 /* SettingsViewController.m */; };
+		52F4316D15DD93560086BFE5 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52F4316B15DD93560086BFE5 /* SettingsViewController.xib */; };
+		52F4317015DDA2D80086BFE5 /* SynthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F4316F15DDA2D80086BFE5 /* SynthManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,21 +41,28 @@
 		52F4312715DD817B0086BFE5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		52F4312915DD817B0086BFE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		52F4312B15DD817B0086BFE5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		52F4312F15DD817B0086BFE5 /* DSynth-Info.plist */ = {isa = PBXFileReference; path = "DSynth-Info.plist"; sourceTree = "<group>"; };
+		52F4312F15DD817B0086BFE5 /* DSynth-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DSynth-Info.plist"; sourceTree = "<group>"; };
 		52F4313115DD817B0086BFE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		52F4313315DD817B0086BFE5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		52F4313515DD817B0086BFE5 /* DSynth-Prefix.pch */ = {isa = PBXFileReference; path = "DSynth-Prefix.pch"; sourceTree = "<group>"; };
-		52F4313615DD817B0086BFE5 /* AppDelegate.h */ = {isa = PBXFileReference; path = AppDelegate.h; sourceTree = "<group>"; };
+		52F4313515DD817B0086BFE5 /* DSynth-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DSynth-Prefix.pch"; sourceTree = "<group>"; };
+		52F4313615DD817B0086BFE5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		52F4313715DD817B0086BFE5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		52F4313A15DD817B0086BFE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		52F4313C15DD817B0086BFE5 /* ViewController.h */ = {isa = PBXFileReference; path = ViewController.h; sourceTree = "<group>"; };
+		52F4313C15DD817B0086BFE5 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		52F4313D15DD817B0086BFE5 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		52F4314415DD817B0086BFE5 /* DSynthTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DSynthTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		52F4314515DD817B0086BFE5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		52F4314D15DD817B0086BFE5 /* DSynthTests-Info.plist */ = {isa = PBXFileReference; path = "DSynthTests-Info.plist"; sourceTree = "<group>"; };
+		52F4314D15DD817B0086BFE5 /* DSynthTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DSynthTests-Info.plist"; sourceTree = "<group>"; };
 		52F4314F15DD817B0086BFE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		52F4315115DD817C0086BFE5 /* DSynthTests.h */ = {isa = PBXFileReference; path = DSynthTests.h; sourceTree = "<group>"; };
+		52F4315115DD817C0086BFE5 /* DSynthTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSynthTests.h; sourceTree = "<group>"; };
 		52F4315215DD817C0086BFE5 /* DSynthTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSynthTests.m; sourceTree = "<group>"; };
+		52F4315C15DD86A90086BFE5 /* KeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardViewController.h; sourceTree = "<group>"; };
+		52F4315D15DD86A90086BFE5 /* KeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardViewController.m; sourceTree = "<group>"; };
+		52F4316915DD93560086BFE5 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		52F4316A15DD93560086BFE5 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		52F4316B15DD93560086BFE5 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
+		52F4316E15DDA2D80086BFE5 /* SynthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynthManager.h; sourceTree = "<group>"; };
+		52F4316F15DDA2D80086BFE5 /* SynthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynthManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,12 +122,17 @@
 		52F4312D15DD817B0086BFE5 /* DSynth */ = {
 			isa = PBXGroup;
 			children = (
+				52F4312E15DD817B0086BFE5 /* Supporting Files */,
 				52F4313615DD817B0086BFE5 /* AppDelegate.h */,
 				52F4313715DD817B0086BFE5 /* AppDelegate.m */,
-				52F4313915DD817B0086BFE5 /* MainStoryboard.storyboard */,
 				52F4313C15DD817B0086BFE5 /* ViewController.h */,
 				52F4313D15DD817B0086BFE5 /* ViewController.m */,
-				52F4312E15DD817B0086BFE5 /* Supporting Files */,
+				52F4315C15DD86A90086BFE5 /* KeyboardViewController.h */,
+				52F4315D15DD86A90086BFE5 /* KeyboardViewController.m */,
+				52F4316915DD93560086BFE5 /* SettingsViewController.h */,
+				52F4316A15DD93560086BFE5 /* SettingsViewController.m */,
+				52F4316E15DDA2D80086BFE5 /* SynthManager.h */,
+				52F4316F15DDA2D80086BFE5 /* SynthManager.m */,
 			);
 			path = DSynth;
 			sourceTree = "<group>";
@@ -124,6 +140,8 @@
 		52F4312E15DD817B0086BFE5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				52F4313915DD817B0086BFE5 /* MainStoryboard.storyboard */,
+				52F4316B15DD93560086BFE5 /* SettingsViewController.xib */,
 				52F4312F15DD817B0086BFE5 /* DSynth-Info.plist */,
 				52F4313015DD817B0086BFE5 /* InfoPlist.strings */,
 				52F4313315DD817B0086BFE5 /* main.m */,
@@ -223,6 +241,7 @@
 			files = (
 				52F4313215DD817B0086BFE5 /* InfoPlist.strings in Resources */,
 				52F4313B15DD817B0086BFE5 /* MainStoryboard.storyboard in Resources */,
+				52F4316D15DD93560086BFE5 /* SettingsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +279,9 @@
 				52F4313415DD817B0086BFE5 /* main.m in Sources */,
 				52F4313815DD817B0086BFE5 /* AppDelegate.m in Sources */,
 				52F4313E15DD817B0086BFE5 /* ViewController.m in Sources */,
+				52F4315E15DD86A90086BFE5 /* KeyboardViewController.m in Sources */,
+				52F4316C15DD93560086BFE5 /* SettingsViewController.m in Sources */,
+				52F4317015DDA2D80086BFE5 /* SynthManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
