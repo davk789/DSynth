@@ -8,11 +8,25 @@
 
 #import "KeyboardViewController.h"
 
-@interface KeyboardViewController ()
-
-@end
 
 @implementation KeyboardViewController
+
+#pragma mark -
+
+- (void)generateKeysFromScaleGen:(NSArray *)gen {
+    int oi = 0;
+    int ui = 0;
+
+    for (NSNumber *uval in gen) {
+        for (NSNumber *oval in gen) {
+            
+        }
+    }
+    
+
+}
+
+#pragma mark -
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -26,7 +40,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+
+    self.view.backgroundColor = [[UIColor alloc] initWithRed:0.33 green:0.33 blue:0.33 alpha:1.0];
 }
 
 - (void)viewDidUnload

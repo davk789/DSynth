@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface KeyboardViewController : UIViewController
+@interface KeyboardViewController : UIViewController {
+    NSMutableArray *scale;
+}
+
+- (void)generateKeysFromScaleGen:(NSArray *)gen;
+
 
 @end

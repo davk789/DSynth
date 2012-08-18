@@ -7,7 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KeyboardViewController.h"
+#import "SettingsViewController.h"
+#import "SynthManager.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController {
+    SynthManager *synthManager;
+}
+
+@property (strong, nonatomic) KeyboardViewController *keyboardController;
+@property (strong, nonatomic) SettingsViewController *settingsController;
+
+- (IBAction)switchViews:(id)sender;
 
 @end

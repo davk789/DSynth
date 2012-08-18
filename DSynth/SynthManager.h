@@ -10,4 +10,6 @@
 
 @interface SynthManager : NSObject
 
+@property (strong, nonatomic) NSArray *scaleGen;
+
 @end
