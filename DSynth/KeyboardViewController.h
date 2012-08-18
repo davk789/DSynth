@@ -7,12 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SynthManager.h"
 
 @interface KeyboardViewController : UIViewController {
-    NSMutableArray *scale;
+    NSMutableArray *keyViews;
+    NSMutableArray *activeTouches;
 }
 
+@property (strong, nonatomic) SynthManager *synthManager;
+
 - (void)generateKeysFromScaleGen:(NSArray *)gen;
+
+- (NSArray *)getActiveNotesForLocationX:(int)x y:(int)y;
+- (NSArray *)getInactiveNotes:(NSArray *)notes;
+
+- (void)keyDown:(NSNumber *)num;
+- (void)keyUp:(NSNumber *)num;
 
 
 @end
