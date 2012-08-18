@@ -38,7 +38,7 @@
 					<object class="IBUILabel" id="992739354">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{321, 262}, {56, 21}}</string>
+						<string key="NSFrame">{{321, 262}, {319, 21}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -47,7 +47,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">HELLO</string>
+						<string key="IBUIText">THIS WILL BE THE SETTINGS WINDOW</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDAAA</bytes>

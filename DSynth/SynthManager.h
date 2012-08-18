@@ -18,7 +18,7 @@
 @property (strong, nonatomic) NSMutableArray *activeNotes;
 @property (strong, nonatomic) NSArray *scaleGen;
 
-- (void)setScale:(NSArray *)scale;
+- (void)sendScaleToPd;
 - (void)noteOn:(int)noteNum;
 - (void)noteOff:(int)noteNum;
 

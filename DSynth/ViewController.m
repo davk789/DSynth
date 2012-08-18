@@ -19,9 +19,12 @@
     
 	
     synthManager = [[SynthManager alloc] init];
+    [synthManager sendScaleToPd];
     
     self.keyboardController = [[KeyboardViewController alloc] init];
     [self.keyboardController generateKeysFromScaleGen:synthManager.scaleGen];
+    
+    self.keyboardController.synthManager = synthManager;
     
     [self.view insertSubview:self.keyboardController.view atIndex:0];
     

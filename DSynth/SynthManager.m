@@ -38,18 +38,17 @@
     return self;
 }
 
-- (void)setScale:(NSArray *)scale {
-    // this will be where the scale is built dynamically, eventually. just run on init now.
-    NSLog(@"initializing the pitch array");
-    int numNotes = [scale count];
+- (void)sendScaleToPd {
+    int numNotes = pow([self.scaleGen count], 2);
     float tratios[numNotes];
-    
-    for (int i = 0; i < numNotes; ++i) {
-        tratios[i] = [[scale objectAtIndex:i] floatValue];
+    int i = 0;
+    for (NSNumber *uval in self.scaleGen) {
+        for (NSNumber *oval in self.scaleGen) {
+            tratios[i] = [oval floatValue] / [uval floatValue];
+            ++i;
+        }
     }
-    
     [PdBase copyArray:tratios toArrayNamed:@"freqtable" withOffset:0 count:numNotes];
-    
 }
 
 - (void)noteOn:(int)noteNum {

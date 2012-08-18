@@ -15,7 +15,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    self.audioController = [[PdAudioController alloc] init];
+    [self.audioController configureAmbientWithSampleRate:44100 numberChannels:2 mixingEnabled:YES];
+    [self.audioController print];
+    
+    self.audioController.active = YES;
+
     return YES;
 }
 							

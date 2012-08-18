@@ -218,7 +218,8 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        keyViews = [[NSMutableArray alloc] init];
+        activeTouches = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -228,6 +229,7 @@
     [super viewDidLoad];
 
     self.view.backgroundColor = [[UIColor alloc] initWithRed:0.33 green:0.33 blue:0.33 alpha:1.0];
+    self.view.multipleTouchEnabled = YES;
 }
 
 - (void)viewDidUnload
