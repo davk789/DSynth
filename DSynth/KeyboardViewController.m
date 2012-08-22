@@ -6,6 +6,10 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+/**
+    THIS VIEW CONTROLLER HAS ALL THE SETTINGS CONTROLS AS WELL AS THE KEYBOARD
+ */
+
 #import "KeyboardViewController.h"
 
 #pragma mark - additions
@@ -26,6 +30,8 @@
 @implementation KeyboardViewController
 
 @synthesize synthManager = _synthManager;
+@synthesize tuningSelect = _tuningSelect;
+@synthesize tuningSelectPopover = _tuningSelectPopover;
 
 #pragma mark -
 
@@ -230,6 +236,8 @@
 
     self.view.backgroundColor = [[UIColor alloc] initWithRed:0.33 green:0.33 blue:0.33 alpha:1.0];
     self.view.multipleTouchEnabled = YES;
+    
+    
 }
 
 - (void)viewDidUnload
@@ -242,5 +250,22 @@
 {
 	return YES;
 }
+
+#pragma mark - Tuning Selector methods
+
+- (void)tuningSelected:(NSString *)tuning {
+    NSLog(@"this is my tuning %@", tuning);
+}
+
+- (IBAction)setTuningButtonTapped:(id)sender {
+    if (self.tuningSelect == nil) {
+        //
+        self.tuningSelect = [[TuningSelectorViewController alloc] initWithStyle:UITableViewStylePlain];
+        self.tuningSelect.delegate = self;
+        self.tuningSelectPopover = [[UIPopoverController alloc] initWithContentViewController:self.tuningSelect];
+    }
+    [self.tuningSelectPopover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:true];
+}
+
 
 @end

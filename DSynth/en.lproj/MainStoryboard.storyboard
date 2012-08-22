@@ -35,6 +35,9 @@
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
+                    <connections>
+                        <outlet property="settingsWindowButton" destination="RHM-xB-dkA" id="sU0-WZ-9A1"/>
+                    </connections>
                 </viewController>
             </objects>
         </scene>
@@ -44,6 +47,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
             <relationships>
                 <relationship kind="action" name="switchViews:"/>
+                <relationship kind="outlet" name="settingsWindowButton" candidateClass="UIButton"/>
             </relationships>
         </class>
     </classes>

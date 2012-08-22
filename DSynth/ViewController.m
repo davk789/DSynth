@@ -12,6 +12,7 @@
 
 @synthesize keyboardController = _keyboardController;
 @synthesize settingsController = _settingsController;
+@synthesize settingsWindowButton = _settingsWindowButton;
 
 - (void)viewDidLoad
 {
@@ -21,12 +22,16 @@
     synthManager = [[SynthManager alloc] init];
     [synthManager sendScaleToPd];
     
-    self.keyboardController = [[KeyboardViewController alloc] init];
+//    self.keyboardController = [[KeyboardViewController alloc] init];
+    self.keyboardController = [[KeyboardViewController alloc] initWithNibName:@"KeyboardViewController" 
+                                                                       bundle:nil];
     [self.keyboardController generateKeysFromScaleGen:synthManager.scaleGen];
     
     self.keyboardController.synthManager = synthManager;
     
     [self.view insertSubview:self.keyboardController.view atIndex:0];
+    
+    self.settingsWindowButton.hidden = YES;
     
 }
 

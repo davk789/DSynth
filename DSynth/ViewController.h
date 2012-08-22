@@ -17,7 +17,9 @@
 
 @property (strong, nonatomic) KeyboardViewController *keyboardController;
 @property (strong, nonatomic) SettingsViewController *settingsController;
+@property (strong, nonatomic) IBOutlet UIButton *settingsWindowButton;
 
 - (IBAction)switchViews:(id)sender;
+
 
 @end

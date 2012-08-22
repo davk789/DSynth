@@ -8,13 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "SynthManager.h"
+#import "TuningSelectorViewController.h"
 
-@interface KeyboardViewController : UIViewController {
+@interface KeyboardViewController : UIViewController <TuningSelectorDelegate> {
     NSMutableArray *keyViews;
     NSMutableArray *activeTouches;
 }
 
+@property (strong, nonatomic) TuningSelectorViewController *tuningSelect;
+@property (strong, nonatomic) UIPopoverController *tuningSelectPopover;
 @property (strong, nonatomic) SynthManager *synthManager;
+
 
 - (void)generateKeysFromScaleGen:(NSArray *)gen;
 
@@ -24,5 +28,6 @@
 - (void)keyDown:(NSNumber *)num;
 - (void)keyUp:(NSNumber *)num;
 
+- (IBAction)setTuningButtonTapped:(id)sender;
 
 @end
