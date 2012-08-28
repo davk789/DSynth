@@ -70,6 +70,10 @@
     
     // Configure the cell...
     
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"tuning"];
+    }
+    
     NSString *tuning = [self.tunings objectAtIndex:indexPath.row];
     cell.textLabel.text = tuning;
     

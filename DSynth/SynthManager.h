@@ -16,10 +16,11 @@
 }
 
 @property (strong, nonatomic) NSMutableArray *activeNotes;
-@property (strong, nonatomic) NSArray *scaleGen;
+@property (strong, nonatomic) NSMutableArray *scaleGen;
 
 - (void)sendScaleToPd;
 - (void)noteOn:(int)noteNum;
 - (void)noteOff:(int)noteNum;
+- (void)setScaleGenValue:(NSNumber *)value atIndex:(NSUInteger)index;
 
 @end

@@ -7,19 +7,34 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "KeyboardViewController.h"
-#import "SettingsViewController.h"
 #import "SynthManager.h"
+#import "TuningSelectorViewController.h"
 
-@interface ViewController : UIViewController {
-    SynthManager *synthManager;
+@interface ViewController : UIViewController <TuningSelectorDelegate, UITextFieldDelegate> {
+    NSMutableArray *keyViews;
+    NSMutableArray *keyLabels;
+    NSMutableArray *activeTouches;
+    NSMutableArray *tuningTextFields;
+    BOOL toolbarHidden;
 }
 
-@property (strong, nonatomic) KeyboardViewController *keyboardController;
-@property (strong, nonatomic) SettingsViewController *settingsController;
-@property (strong, nonatomic) IBOutlet UIButton *settingsWindowButton;
+@property (strong, nonatomic) TuningSelectorViewController *tuningSelect;
+@property (strong, nonatomic) UIPopoverController *tuningSelectPopover;
+@property (strong, nonatomic) SynthManager *synthManager;
+@property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (strong, nonatomic) IBOutlet UIButton *toolbarButton;
 
-- (IBAction)switchViews:(id)sender;
 
+- (void)generateKeysFromScaleGen:(NSArray *)gen;
+- (void)makeScaleGenTextFields:(NSArray *)gen;
+
+- (NSArray *)getActiveNotesForLocationX:(int)x y:(int)y;
+- (NSArray *)getInactiveNotes:(NSArray *)notes;
+
+- (void)keyDown:(NSNumber *)num;
+- (void)keyUp:(NSNumber *)num;
+
+- (IBAction)setTuningButtonTapped:(id)sender;
+- (IBAction)hideToolbarButtonTapped:(id)sender;
 
 @end

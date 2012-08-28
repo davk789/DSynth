@@ -9,13 +9,13 @@
 #import "SynthManager.h"
 
 @implementation SynthManager
-@synthesize activeNotes;
-@synthesize scaleGen;
+@synthesize activeNotes = _activeNotes;
+@synthesize scaleGen = _scaleGen;
 
 - (id)init {
     self = [super init];
     if (self) {
-        self.scaleGen = [NSArray arrayWithObjects:
+        self.scaleGen = [NSMutableArray arrayWithObjects:
                          [NSNumber numberWithFloat:8.0], 
                          [NSNumber numberWithFloat:9.0], 
                          [NSNumber numberWithFloat:10.0], 
@@ -89,4 +89,8 @@
     
 }
 
+- (void)setScaleGenValue:(NSNumber *)value atIndex:(NSUInteger)index {
+    [self.scaleGen replaceObjectAtIndex:index withObject:value];
+    [self sendScaleToPd];
+}
 @end
