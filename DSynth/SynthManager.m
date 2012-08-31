@@ -11,6 +11,7 @@
 @implementation SynthManager
 @synthesize activeNotes = _activeNotes;
 @synthesize scaleGen = _scaleGen;
+@synthesize centerPitch = _centerPitch;
 
 - (id)init {
     self = [super init];
@@ -25,7 +26,7 @@
                          nil];
 
         self.activeNotes = [[NSMutableArray alloc] init];
-        centerFreq = 440.0;
+        self.centerPitch = [NSNumber numberWithFloat:60.0];
         dispatcher = [[PdDispatcher alloc] init];
         [PdBase setDelegate:dispatcher];
         void *patch = [PdBase openFile:@"dsynth.pd" path:[[NSBundle mainBundle] resourcePath]];
@@ -36,6 +37,12 @@
     }
     
     return self;
+}
+
+- (void)setCenterPitch:(NSNumber *)centerPitch {
+    _centerPitch = centerPitch;
+    float clipPitch = MAX(MIN([centerPitch floatValue], 127.0), 0.0);
+    [PdBase sendFloat:clipPitch toReceiver:@"pitch"];
 }
 
 - (void)sendScaleToPd {

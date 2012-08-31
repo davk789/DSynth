@@ -8,10 +8,14 @@
 
 #import "TuningSelectorViewController.h"
 
+#pragma mark -
+
 @implementation TuningSelectorViewController
 
 @synthesize tunings = _tunings;
 @synthesize delegate = _delegate;
+
+#pragma mark inherited methods
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -51,7 +55,7 @@
 	return YES;
 }
 
-#pragma mark - Table view data source
+#pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -72,7 +76,16 @@
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"tuning"];
+        
+        int lastInd = [indexPath length] - 1;
+        if (lastInd >= 0) {
+            if ([indexPath indexAtPosition:lastInd] == 0) {
+                cell.backgroundView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            }
+        }
     }
+    
+    NSLog(@"%i, %i l: %i", [indexPath indexAtPosition:0], [indexPath indexAtPosition:1], [indexPath length]);
     
     NSString *tuning = [self.tunings objectAtIndex:indexPath.row];
     cell.textLabel.text = tuning;
@@ -119,7 +132,7 @@
 }
 */
 
-#pragma mark - Table view delegate
+#pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

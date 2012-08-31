@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "SynthManager.h"
+#import "SettingsManager.h"
 #import "TuningSelectorViewController.h"
 
-@interface ViewController : UIViewController <TuningSelectorDelegate, UITextFieldDelegate> {
+@interface ViewController : UIViewController <TuningSelectorDelegate, UITextFieldDelegate, SettingsManagerDelegate> {
     NSMutableArray *keyViews;
     NSMutableArray *keyLabels;
     NSMutableArray *activeTouches;
@@ -20,9 +21,13 @@
 
 @property (strong, nonatomic) TuningSelectorViewController *tuningSelect;
 @property (strong, nonatomic) UIPopoverController *tuningSelectPopover;
+
 @property (strong, nonatomic) SynthManager *synthManager;
+@property (strong, nonatomic) SettingsManager *settingsManager;
+
 @property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (strong, nonatomic) IBOutlet UIButton *toolbarButton;
+@property (strong, nonatomic) IBOutlet UITextField *pitchField;
 
 
 - (void)generateKeysFromScaleGen:(NSArray *)gen;
@@ -36,5 +41,11 @@
 
 - (IBAction)setTuningButtonTapped:(id)sender;
 - (IBAction)hideToolbarButtonTapped:(id)sender;
+- (IBAction)pitchOctaveUpTapped:(id)sender;
+- (IBAction)pitchOctaveDownTapped:(id)sender;
+- (IBAction)pitchNoteNumSet:(id)sender;
+
+- (void)saveButtonPressed;
+- (void)editButtonPressed;
 
 @end

@@ -9,5 +9,33 @@
 #import "SettingsManager.h"
 
 @implementation SettingsManager
+@synthesize delegate = _delegate;
+
+- (id)init {
+    self = [super init];
+    if (self) {
+    }
+    return self;
+}
+
+- (void)savePresetWithName:(NSString *)name {
+    
+    NSDictionary *appState = [self.delegate givePresetData];
+    
+    NSLog(@"%@", appState);
+
+}
+/*
+- (void)testDirectory {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docsDir = [paths objectAtIndex:0];
+    BOOL res = [fileManager changeCurrentDirectoryPath:docsDir];
+    if (!res) {
+        NSLog(@"couldn't change directory");
+    }
+    NSArray *fileList = [fileManager contentsOfDirectoryAtPath:@"." error:nil];
+    NSLog(@"%@", fileList);
+}*/
 
 @end

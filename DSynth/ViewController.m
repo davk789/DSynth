@@ -67,8 +67,12 @@
 @implementation ViewController
 
 @synthesize synthManager = _synthManager;
+@synthesize settingsManager = _settingsManager;
+
 @synthesize tuningSelect = _tuningSelect;
 @synthesize tuningSelectPopover = _tuningSelectPopover;
+@synthesize pitchField = _pitchField;
+
 @synthesize toolbar = _toolbar;
 @synthesize toolbarButton = _toolbarButton;
 
@@ -135,7 +139,7 @@
     }
     tuningTextFields = [[NSMutableArray alloc] init]; // is this a memory leak?
     
-    float y = 25.0;
+    float y = 45.0;
     int i = 1;
     for (NSNumber *val in gen) {
         UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(25.0, y, 40.0, 20.0)];
@@ -327,17 +331,38 @@
     self.view.backgroundColor = [[UIColor alloc] initWithRed:0.33 green:0.33 blue:0.33 alpha:1.0];
     self.view.multipleTouchEnabled = YES;
     
+    // initialize the synth manager
+    
     self.synthManager = [[SynthManager alloc] init];
     [self.synthManager sendScaleToPd];
-    
+    self.synthManager.centerPitch = [NSNumber numberWithFloat:60.0];
     // create the key UIImageViews
     [self generateKeysFromScaleGen:self.synthManager.scaleGen];
-
     // create the scale sequence text boxes
     [self makeScaleGenTextFields:self.synthManager.scaleGen];
     
+    // initialize the settings manager
     
+    self.settingsManager = [[SettingsManager alloc] init];
+    self.settingsManager.delegate = self;
+    
+    self.pitchField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    
+    // customize the toolbar appearance
+    
+    UIImage *toolBarIMG = [UIImage imageNamed: @"title-bar.png"];  
+    
+    if ([self.toolbar respondsToSelector:@selector(setBackgroundImage:forToolbarPosition:barMetrics:)]) { 
+        // iOS 5.0+
+        [self.toolbar setBackgroundImage:toolBarIMG forToolbarPosition:0 barMetrics:0]; 
+    }
+    else {
+        // iOS 4.x-
+        [self.toolbar insertSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title-bar.png"]] atIndex:0];
+    }
+
 }
+
 
 - (void)viewDidUnload
 {
@@ -351,15 +376,28 @@
            (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
-#pragma mark IBActions
+#pragma mark ibactions
 
 - (IBAction)setTuningButtonTapped:(id)sender {
     if (self.tuningSelect == nil) {
-        //
-        self.tuningSelect = [[TuningSelectorViewController alloc] initWithStyle:UITableViewStylePlain];
+        // initialize the tuning select popover
+        
+        self.tuningSelect = [[TuningSelectorViewController alloc]  initWithStyle:UITableViewStylePlain];
         self.tuningSelect.delegate = self;
-        self.tuningSelectPopover = [[UIPopoverController alloc] initWithContentViewController:self.tuningSelect];
+
+        // build the navigation controller
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.tuningSelect];
+        self.tuningSelect.navigationItem.title = @"Tuning";        
+        
+        UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editButtonPressed)];
+        UIBarButtonItem *save = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(saveButtonPressed)];
+        
+        [self.tuningSelect.navigationItem setLeftBarButtonItem:edit];
+        [self.tuningSelect.navigationItem setRightBarButtonItem:save];
+        
+        self.tuningSelectPopover = [[UIPopoverController alloc] initWithContentViewController:navController];
     }
+    
     [self.tuningSelectPopover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:true];
 }
 
@@ -386,7 +424,51 @@
     toolbarHidden = !toolbarHidden;
 }
 
+- (IBAction)pitchOctaveUpTapped:(id)sender {
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    float val = [[f numberFromString:[self.pitchField text]] floatValue];
+
+    val += 12.0;
+    
+    self.synthManager.centerPitch = [NSNumber numberWithFloat:val];
+    
+    NSString *disp = [[NSString alloc] initWithFormat:@"%.2f", val, nil];
+    self.pitchField.text = disp;
+}
+
+- (IBAction)pitchOctaveDownTapped:(id)sender {
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    float val = [[f numberFromString:[self.pitchField text]] floatValue];
+    val -= 12.0;
+    
+    self.synthManager.centerPitch = [NSNumber numberWithFloat:val];
+    
+    NSString *disp = [[NSString alloc] initWithFormat:@"%.2f", val, nil];
+    self.pitchField.text = disp;
+}
+
+- (IBAction)pitchNoteNumSet:(id)sender {
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    float val = [[f numberFromString:[self.pitchField text]] floatValue];
+    
+    self.synthManager.centerPitch = [NSNumber numberWithFloat:val];
+    
+    NSString *disp = [[NSString alloc] initWithFormat:@"%.2f", val, nil];
+    self.pitchField.text = disp;
+    
+}
+
 #pragma mark delegate methods
+
+- (void)saveButtonPressed {
+    NSLog(@"save button pressed");
+}
+- (void)editButtonPressed {
+    NSLog(@"edit button pressed");
+}
 
 - (void)tuningSelected:(NSString *)tuning {
     NSLog(@"this is my tuning %@", tuning);
@@ -406,6 +488,19 @@
         NSString *str = [NSString stringWithFormat:@"%i", [[self.synthManager.scaleGen objectAtIndex:ind] intValue]];
         [[tuningTextFields objectAtIndex:ind] setText:str];
     }
+}
+
+- (NSDictionary *)givePresetData {
+    NSArray *keys = [[NSArray alloc] initWithObjects:@"tuningSeq", nil];
+    
+    // tuning seq
+    NSMutableArray *values = [[NSMutableArray alloc] init];
+    for (UITextField *field in tuningTextFields) {
+        [values addObject:[field text]];
+    }
+    
+    NSMutableDictionary *result = [NSMutableDictionary dictionaryWithObjects:values forKeys:keys];
+    return result;
 }
 
 @end

@@ -11,12 +11,13 @@
 
 
 @interface SynthManager : NSObject {
-    float centerFreq;
     PdDispatcher *dispatcher;
+
 }
 
 @property (strong, nonatomic) NSMutableArray *activeNotes;
 @property (strong, nonatomic) NSMutableArray *scaleGen;
+@property (strong, nonatomic) NSNumber *centerPitch;
 
 - (void)sendScaleToPd;
 - (void)noteOn:(int)noteNum;
