@@ -14,53 +14,6 @@
 
 #pragma mark - additions
 
-@interface NSNumber(DSynthAdditions)
-+ (NSNumber *)getDistanceFromX:(NSNumber *)x y:(NSNumber *)y toX:(NSNumber *)dx y:(NSNumber *)dy;
-- (NSNumber *)greatestCommonDivisor:(NSNumber *)num;
-@end
-@implementation NSNumber(DSynthAdditions)
-+ (NSNumber *)getDistanceFromX:(NSNumber *)x y:(NSNumber *)y toX:(NSNumber *)xx y:(NSNumber *)xy {
-    float dx = abs([xx  floatValue] - [x floatValue]);
-    float dy = abs([xy  floatValue] - [y floatValue]);
-    float distance = sqrt(pow(dx, 2.0) + pow(dy, 2.0));
-    return [NSNumber numberWithFloat:distance];
-}
-
-- (NSNumber *)greatestCommonDivisor:(NSNumber *)num {
-    int b = [self intValue];
-    int a = [num intValue];
-    int rem;
-    while (b != 0) {
-        rem = a % b;
-        a = b;
-        b = rem;
-    }
-    return [NSNumber numberWithInt:a];
-}
-@end
-
-@interface NSArray(DSynthAdditions)
-- (NSArray *)reduceFraction;
-@end
-@implementation NSArray(DSynthAdditions)
-- (NSArray *)reduceFraction {
-    // return a numerator and denominator reduced to to between range and range*2
-    // make sure there are two numbers at the start of this array
-    int numer;
-    int denom;
-    int gcd;
-    if ([[self objectAtIndex:0] isKindOfClass:[NSNumber class]] && [[self objectAtIndex:1] isKindOfClass:[NSNumber class]]) {
-        gcd = [[[self objectAtIndex:0] greatestCommonDivisor:[self objectAtIndex:1]] intValue];
-        numer = [[self objectAtIndex:0] intValue] / gcd;
-        denom = [[self objectAtIndex:1] intValue] / gcd;
-        
-        
-    }
-    return [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:numer],
-                                            [NSNumber numberWithInt:denom], 
-                                            nil];
-}
-@end
 
 #pragma mark -
 
@@ -72,14 +25,17 @@
 @synthesize tuningSelect = _tuningSelect;
 @synthesize tuningSelectPopover = _tuningSelectPopover;
 @synthesize pitchField = _pitchField;
+@synthesize numStepsField = _numStepsField;
 
 @synthesize toolbar = _toolbar;
-@synthesize toolbarButton = _toolbarButton;
 
 - (NSArray *)getActiveNotesForLocationX:(int)x y:(int)y {
     /* return an array with all notes triggered from x, y */
     NSMutableArray *notes = [[NSMutableArray alloc] init];
     int count = [keyViews count];
+    
+    int numNotes = MAX([self.synthManager.scaleGen count], 1);
+    int det = 348 / numNotes;// 58 * 6 = 348 
     
     for (int i = 0; i < count; ++i) {
         CGPoint loc = [[keyViews objectAtIndex:i] center];
@@ -88,7 +44,7 @@
                               y:[NSNumber numberWithInt:y] 
                               toX:[NSNumber numberWithFloat:loc.x]
                               y:[NSNumber numberWithFloat:loc.y]];
-        if ([distance floatValue] < 58.0) {
+        if ([distance floatValue] < det) {
             [notes addObject:[NSNumber numberWithInt:i]];
         }
     }
@@ -136,8 +92,8 @@
         for (UITextField *text in tuningTextFields) {
             [text removeFromSuperview];
         }
+        [tuningTextFields removeAllObjects];
     }
-    tuningTextFields = [[NSMutableArray alloc] init]; // is this a memory leak?
     
     float y = 45.0;
     int i = 1;
@@ -161,20 +117,25 @@
 - (void)generateKeysFromScaleGen:(NSArray *)gen {
     // root on the bottom, otonality right, utonality left
     int xb = 512; // base loc for x
-    int yb = 600;
+    int yb = 615;
+    int genCount = MAX([gen count], 1);
+    int xStep = 528 / genCount; // 88 * 6 = 528
+    int yStep = 300 / genCount; // 50 * 6 = 300
+    int width = 690 / genCount;// 115 * 6 = 690
+    int height = (600 / genCount) - 1;// 100 * 6 = 600
     
     if ([keyViews count] > 0) {
         for (UIImageView *view in keyViews) {
             [view removeFromSuperview];
         }
-        keyViews = [[NSMutableArray alloc] init];
+        [keyViews removeAllObjects];
     }
     
     if ([keyLabels count] > 0) {
         for (UILabel *label in keyLabels) {
             [label removeFromSuperview];
         }
-        keyLabels = [[NSMutableArray alloc] init];
+        [keyLabels removeAllObjects];
     }
     
     for (NSNumber *uval in gen) {
@@ -182,7 +143,7 @@
         int x = xb;
         for (NSNumber *oval in gen) {
             UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"key-off.png"]];
-            CGRect bounds = CGRectMake(0.0, 0.0, 115.0, 100.0); 
+            CGRect bounds = CGRectMake(0.0, 0.0, width, height); 
             CGPoint center = CGPointMake(x, y);
             image.bounds = bounds;
             image.center = center;
@@ -196,16 +157,15 @@
             label.textAlignment = UITextAlignmentCenter;
             [keyLabels addObject:label];
             
-            NSArray *displayNums = [[[NSArray alloc] initWithObjects:oval, uval, nil] reduceFraction];
-            
+            NSArray *displayNums = [[[[NSArray alloc] initWithObjects:oval, uval, nil] transposeToOctaveRange:1] reduceFraction];
             [label setText:[NSString stringWithFormat:@"%i / %i", [[displayNums objectAtIndex:0] intValue], [[displayNums objectAtIndex:1] intValue]]];
             [self.view addSubview:label];
             
-            x += 88;
-            y -= 50;
+            x += xStep;
+            y -= yStep;
         }
-        xb -= 88;
-        yb -= 50;
+        xb -= xStep;
+        yb -= yStep;
     }
     
 }
@@ -325,7 +285,6 @@
     keyLabels = [[NSMutableArray alloc] init];
     activeTouches = [[NSMutableArray alloc] init];
     tuningTextFields = [[NSMutableArray alloc] init];
-    toolbarHidden = FALSE;
 
     
     self.view.backgroundColor = [[UIColor alloc] initWithRed:0.33 green:0.33 blue:0.33 alpha:1.0];
@@ -346,7 +305,9 @@
     self.settingsManager = [[SettingsManager alloc] init];
     self.settingsManager.delegate = self;
     
+    // set keyboard types for textfields
     self.pitchField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    self.numStepsField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     
     // customize the toolbar appearance
     
@@ -401,38 +362,15 @@
     [self.tuningSelectPopover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:true];
 }
 
-- (IBAction)hideToolbarButtonTapped:(id)sender {
-
-    CGRect toolbarFrame = self.toolbar.frame;
-    CGRect buttonFrame = self.toolbarButton.frame;
-    [UIView beginAnimations:nil context:nil];
-    
-    if (!toolbarHidden) {
-        toolbarFrame.origin.y += toolbarFrame.size.height;
-        buttonFrame.origin.y += toolbarFrame.size.height;
-        [self.toolbarButton setTitle:@"^" forState:UIControlStateNormal];
-    }
-    else {
-        toolbarFrame.origin.y -= toolbarFrame.size.height;
-        buttonFrame.origin.y -= toolbarFrame.size.height;
-        [self.toolbarButton setTitle:@"v" forState:UIControlStateNormal];
-    }
-    self.toolbar.frame = toolbarFrame;
-    self.toolbarButton.frame = buttonFrame;
-    [UIView commitAnimations];
-
-    toolbarHidden = !toolbarHidden;
-}
-
 - (IBAction)pitchOctaveUpTapped:(id)sender {
+    
     NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
     f.numberStyle = NSNumberFormatterDecimalStyle;
     float val = [[f numberFromString:[self.pitchField text]] floatValue];
-
     val += 12.0;
-    
+        
     self.synthManager.centerPitch = [NSNumber numberWithFloat:val];
-    
+        
     NSString *disp = [[NSString alloc] initWithFormat:@"%.2f", val, nil];
     self.pitchField.text = disp;
 }
@@ -452,13 +390,61 @@
 - (IBAction)pitchNoteNumSet:(id)sender {
     NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
     f.numberStyle = NSNumberFormatterDecimalStyle;
-    float val = [[f numberFromString:[self.pitchField text]] floatValue];
+    NSNumber *val = [f numberFromString:[self.pitchField text]];
     
-    self.synthManager.centerPitch = [NSNumber numberWithFloat:val];
+    if (val != nil) {
+        float fval = [val floatValue];
+        
+        self.synthManager.centerPitch = [NSNumber numberWithFloat:fval];
+        
+        NSString *disp = [[NSString alloc] initWithFormat:@"%.2f", fval, nil];
+        self.pitchField.text = disp;
+    }
+    else {
+        NSNumber *pitch = self.synthManager.centerPitch;
+        NSString *disp = [[NSString alloc] initWithFormat:@"%.2f", [pitch floatValue], nil];
+        self.pitchField.text = disp;
+    }
+
+}
+
+- (IBAction)numStepsSet:(id)sender {
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    NSNumber *numSteps = [f numberFromString:[self.numStepsField text]];
     
-    NSString *disp = [[NSString alloc] initWithFormat:@"%.2f", val, nil];
-    self.pitchField.text = disp;
-    
+    if (numSteps != nil) {
+        NSMutableArray *scaleGen = [[NSMutableArray alloc] initWithArray:self.synthManager.scaleGen];
+        int sizeDelta = [numSteps intValue] - [scaleGen count];
+        
+        if (sizeDelta >= 0) {
+            NSNumber *defaultVal = [scaleGen lastObject];
+            while (sizeDelta > 0) {
+                [scaleGen addObject:[defaultVal copy]];
+                --sizeDelta;
+            }
+        }
+        else {
+            while (sizeDelta < 0) {
+                [scaleGen removeLastObject];
+                ++sizeDelta;
+            }
+        }
+        
+        self.synthManager.scaleGen = scaleGen;
+        [self.synthManager sendScaleToPd];
+        
+        NSLog(@"this is the new scalegen %@", self.synthManager.scaleGen);
+        
+        [self generateKeysFromScaleGen:self.synthManager.scaleGen];
+        [self makeScaleGenTextFields:self.synthManager.scaleGen];
+        
+    }
+    else {
+        int numSteps = [self.synthManager.scaleGen count];
+        NSString *disp = [[NSString alloc] initWithFormat:@"%d", numSteps, nil];
+        self.numStepsField.text = disp;
+    }
 }
 
 #pragma mark delegate methods

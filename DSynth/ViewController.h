@@ -10,13 +10,13 @@
 #import "SynthManager.h"
 #import "SettingsManager.h"
 #import "TuningSelectorViewController.h"
+#import "NSObject+DSynthAdditions.h"
 
 @interface ViewController : UIViewController <TuningSelectorDelegate, UITextFieldDelegate, SettingsManagerDelegate> {
     NSMutableArray *keyViews;
     NSMutableArray *keyLabels;
     NSMutableArray *activeTouches;
     NSMutableArray *tuningTextFields;
-    BOOL toolbarHidden;
 }
 
 @property (strong, nonatomic) TuningSelectorViewController *tuningSelect;
@@ -26,9 +26,8 @@
 @property (strong, nonatomic) SettingsManager *settingsManager;
 
 @property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
-@property (strong, nonatomic) IBOutlet UIButton *toolbarButton;
 @property (strong, nonatomic) IBOutlet UITextField *pitchField;
-
+@property (strong, nonatomic) IBOutlet UITextField *numStepsField;
 
 - (void)generateKeysFromScaleGen:(NSArray *)gen;
 - (void)makeScaleGenTextFields:(NSArray *)gen;
@@ -40,10 +39,10 @@
 - (void)keyUp:(NSNumber *)num;
 
 - (IBAction)setTuningButtonTapped:(id)sender;
-- (IBAction)hideToolbarButtonTapped:(id)sender;
 - (IBAction)pitchOctaveUpTapped:(id)sender;
 - (IBAction)pitchOctaveDownTapped:(id)sender;
 - (IBAction)pitchNoteNumSet:(id)sender;
+- (IBAction)numStepsSet:(id)sender;
 
 - (void)saveButtonPressed;
 - (void)editButtonPressed;

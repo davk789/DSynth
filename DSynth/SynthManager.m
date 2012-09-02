@@ -51,10 +51,14 @@
     int i = 0;
     for (NSNumber *uval in self.scaleGen) {
         for (NSNumber *oval in self.scaleGen) {
-            tratios[i] = [oval floatValue] / [uval floatValue];
+            NSArray *ratio = [[[NSArray alloc] initWithObjects:oval, uval, nil] transposeToOctaveRange:1.0];
+            tratios[i] = [[ratio objectAtIndex:0] floatValue] / [[ratio objectAtIndex:1] floatValue];
             ++i;
         }
     }
+    // there needs to be a command here to resize the table in pd
+    int arraySize = pow([self.scaleGen count], 2);
+    [PdBase sendFloat:arraySize toReceiver:@"arraysize"];
     [PdBase copyArray:tratios toArrayNamed:@"freqtable" withOffset:0 count:numNotes];
 }
 

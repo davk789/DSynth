@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PdDispatcher.h"
+#import "NSObject+DSynthAdditions.h"
 
 
 @interface SynthManager : NSObject {
