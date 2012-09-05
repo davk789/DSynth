@@ -18,6 +18,6 @@
 
 @property (assign, nonatomic) id<SettingsManagerDelegate> delegate;
 
-- (void)savePresetWithName:(NSString *)name;
+- (BOOL)savePresetWithName:(NSString *)name;
 
 @end

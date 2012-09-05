@@ -10,7 +10,7 @@
 #import "SynthManager.h"
 #import "SettingsManager.h"
 #import "TuningSelectorViewController.h"
-#import "NSObject+DSynthAdditions.h"
+#import "DSynthAdditions.h"
 
 @interface ViewController : UIViewController <TuningSelectorDelegate, UITextFieldDelegate, SettingsManagerDelegate> {
     NSMutableArray *keyViews;

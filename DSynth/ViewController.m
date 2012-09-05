@@ -449,8 +449,12 @@
 
 #pragma mark delegate methods
 
+-(void)tuningPopoverFinished {
+    [self.tuningSelectPopover dismissPopoverAnimated:YES];
+}
+
 - (void)saveButtonPressed {
-    NSLog(@"save button pressed");
+    [self.settingsManager savePresetWithName:@"test"];
 }
 - (void)editButtonPressed {
     NSLog(@"edit button pressed");
@@ -477,12 +481,27 @@
 }
 
 - (NSDictionary *)givePresetData {
-    NSArray *keys = [[NSArray alloc] initWithObjects:@"tuningSeq", nil];
+    NSArray *keys = [[NSArray alloc] initWithObjects:@"tuningSeq", @"numSteps", @"centerPitch", nil];
     
-    // tuning seq
+    // values
     NSMutableArray *values = [[NSMutableArray alloc] init];
+    // tuning seq
+    NSMutableArray *tsvalues = [[NSMutableArray alloc] init];
     for (UITextField *field in tuningTextFields) {
-        [values addObject:[field text]];
+        [tsvalues addObject:[field text]];
+    }
+    [values addObject:tsvalues];
+    // num steps
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    NSNumber *val = [f numberFromString:[self.numStepsField text]];
+    if (val != nil) {
+        [values addObject:val];
+    }
+    // center pitch
+    NSNumber *center = [f numberFromString:[self.pitchField text]];
+    if (val != nil) {
+        [values addObject:center];
     }
     
     NSMutableDictionary *result = [NSMutableDictionary dictionaryWithObjects:values forKeys:keys];

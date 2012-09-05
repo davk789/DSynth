@@ -18,13 +18,26 @@
     return self;
 }
 
-- (void)savePresetWithName:(NSString *)name {
-    
-    NSDictionary *appState = [self.delegate givePresetData];
-    
-    NSLog(@"%@", appState);
+- (BOOL)savePresetWithName:(NSString *)name {
 
+    NSDictionary *appState = [self.delegate givePresetData];
+    BOOL result = YES;
+    /*   NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docsDir = [paths objectAtIndex:0];
+    BOOL result = NO;
+    
+    if ([fileManager changeCurrentDirectoryPath:docsDir]) {
+        result = [appState writeToFile:[name stringByAppendingString:@".plist"] atomically:YES];*/
+        NSLog(@"saved to %@ :\n%@", name, appState);    
+    /*}
+    else {
+        NSLog(@"couldn't change directory");
+    }*/
+
+    return result;
 }
+
 /*
 - (void)testDirectory {
     NSFileManager *fileManager = [NSFileManager defaultManager];

@@ -10,11 +10,14 @@
 
 @protocol TuningSelectorDelegate
 - (void)tuningSelected:(NSString *)tuning;
+- (void)tuningPopoverFinished;
 @end
 
-@interface TuningSelectorViewController : UITableViewController
+@interface TuningSelectorViewController : UITableViewController {
+    NSArray *headers;
+}
 
-@property (strong, nonatomic) NSArray *tunings;
+@property (strong, nonatomic) NSMutableArray *tunings;
 @property (assign, nonatomic) id<TuningSelectorDelegate> delegate;
 
 @end

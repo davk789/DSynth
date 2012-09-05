@@ -34,10 +34,13 @@
     self.clearsSelectionOnViewWillAppear = NO;
     self.contentSizeForViewInPopover = CGSizeMake(280.0, 450.0);
     
-    self.tunings = [[NSArray alloc] initWithObjects:@"1 3 5 7 9 11", 
-                                                    @"1 5 7 11 13 17 19 23",
-                                                    @"8 9 10 11 12 14",
-                                                    nil];
+    NSArray *factoryTunings = [[NSArray alloc] initWithObjects:@"1 3 5 7 9 11", 
+                               @"1 5 7 11 13 17 19 23",
+                               @"8 9 10 11 12 14",
+                               nil];
+    NSArray *userTunings = [[NSMutableArray alloc] initWithObjects:@"foo", nil];
+    headers = [[NSArray alloc] initWithObjects:@"Factory", @"User", nil];
+    self.tunings = [[NSMutableArray alloc] initWithObjects:factoryTunings, userTunings, nil];
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
@@ -59,12 +62,13 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return [self.tunings count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.tunings count];
+    NSArray *sectionList = [self.tunings objectAtIndex:section];
+    return [sectionList count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -87,10 +91,15 @@
     
     NSLog(@"%i, %i l: %i", [indexPath indexAtPosition:0], [indexPath indexAtPosition:1], [indexPath length]);
     
-    NSString *tuning = [self.tunings objectAtIndex:indexPath.row];
+    NSArray *tuningList = [self.tunings objectAtIndex:indexPath.section];
+    NSString *tuning = [tuningList objectAtIndex:indexPath.row];
     cell.textLabel.text = tuning;
     
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return [headers objectAtIndex:section];
 }
 
 /*
@@ -139,6 +148,7 @@
     if (self.delegate != nil) {
         NSString *tuning = [self.tunings objectAtIndex:indexPath.row];
         [self.delegate tuningSelected:tuning];
+        [self.delegate tuningPopoverFinished];
     }
 }
 
