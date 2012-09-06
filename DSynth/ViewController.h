@@ -11,8 +11,9 @@
 #import "SettingsManager.h"
 #import "TuningSelectorViewController.h"
 #import "DSynthAdditions.h"
+#import "SavePromptView.h"
 
-@interface ViewController : UIViewController <TuningSelectorDelegate, UITextFieldDelegate, SettingsManagerDelegate> {
+@interface ViewController : UIViewController <TuningSelectorDelegate, UITextFieldDelegate, SettingsManagerDelegate, SavePromptViewDelegate> {
     NSMutableArray *keyViews;
     NSMutableArray *keyLabels;
     NSMutableArray *activeTouches;

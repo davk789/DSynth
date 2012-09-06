@@ -34,9 +34,9 @@
     self.clearsSelectionOnViewWillAppear = NO;
     self.contentSizeForViewInPopover = CGSizeMake(280.0, 450.0);
     
-    NSArray *factoryTunings = [[NSArray alloc] initWithObjects:@"1 3 5 7 9 11", 
-                               @"1 5 7 11 13 17 19 23",
-                               @"8 9 10 11 12 14",
+    NSArray *factoryTunings = [[NSArray alloc] initWithObjects:@"Partch 11-limit", 
+                               @"15-limit sequential",
+                               @"15-limit odd numbers",
                                nil];
     NSArray *userTunings = [[NSMutableArray alloc] initWithObjects:@"foo", nil];
     headers = [[NSArray alloc] initWithObjects:@"Factory", @"User", nil];
@@ -146,7 +146,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate != nil) {
-        NSString *tuning = [self.tunings objectAtIndex:indexPath.row];
+        NSArray *userTunings = [self.tunings objectAtIndex:indexPath.section];
+        NSString *tuning = [userTunings objectAtIndex:indexPath.row];
+        
         [self.delegate tuningSelected:tuning];
         [self.delegate tuningPopoverFinished];
     }

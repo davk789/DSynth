@@ -449,12 +449,23 @@
 
 #pragma mark delegate methods
 
+- (void)savePromptView:(SavePromptView *)saveView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSLog(@"pressed button %d title %@", buttonIndex, [saveView enteredText]);
+    [self.tuningSelectPopover dismissPopoverAnimated:YES];
+    //[self.settingsManager savePresetWithName:@"test"];
+}
+
 -(void)tuningPopoverFinished {
     [self.tuningSelectPopover dismissPopoverAnimated:YES];
 }
 
 - (void)saveButtonPressed {
-    [self.settingsManager savePresetWithName:@"test"];
+    SavePromptView *prompt = [[SavePromptView alloc]
+                              initWithPrompt:@"Save Preset" 
+                              delegate:self 
+                              cancelButtonTitle:@"Cancel" 
+                              acceptButtonTitle:@"Save"];
+    [prompt show];
 }
 - (void)editButtonPressed {
     NSLog(@"edit button pressed");

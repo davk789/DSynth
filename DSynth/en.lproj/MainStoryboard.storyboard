@@ -59,14 +59,13 @@
                                 <rect key="frame" x="0.0" y="704" width="1024" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Aa4-Pl-eMq"/>
                                     <barButtonItem title="Tuning" id="bW1-b6-g62">
                                         <connections>
                                             <action selector="setTuningButtonTapped:" destination="2" id="gq3-hf-ux3"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem title="Synth" id="Kr0-UW-gSz"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="jU2-6a-Zln"/>
+                                    <barButtonItem title="Synth" id="Kr0-UW-gSz"/>
                                 </items>
                             </toolbar>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="num steps:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="RdV-oL-0gH">
