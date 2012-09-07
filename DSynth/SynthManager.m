@@ -29,6 +29,7 @@
         self.centerPitch = [NSNumber numberWithFloat:60.0];
         dispatcher = [[PdDispatcher alloc] init];
         [PdBase setDelegate:dispatcher];
+        [dispatcher addListener:self forSource:@"test"];
         void *patch = [PdBase openFile:@"dsynth.pd" path:[[NSBundle mainBundle] resourcePath]];
         if (!patch) {
             NSLog(@"failed to open patch");
@@ -56,9 +57,8 @@
             ++i;
         }
     }
-    // there needs to be a command here to resize the table in pd
-    int arraySize = pow([self.scaleGen count], 2);
-    [PdBase sendFloat:arraySize toReceiver:@"arraysize"];
+
+    [PdBase sendFloat:numNotes toReceiver:@"arraysize"];
     [PdBase copyArray:tratios toArrayNamed:@"freqtable" withOffset:0 count:numNotes];
 }
 
@@ -104,4 +104,16 @@
     [self.scaleGen replaceObjectAtIndex:index withObject:value];
     [self sendScaleToPd];
 }
+
+#pragma mark PdDispatcher delegate methods
+
+- (void)receiveFloat:(float)received fromSource:(NSString *)source {
+    NSLog(@"received %@ %f", source, received);
+}
+
+- (void)receiveList:(NSArray *)list fromSource:(NSString *)source {
+    NSLog(@"received %@ %@", source, list);
+}
+
+
 @end

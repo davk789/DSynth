@@ -11,7 +11,7 @@
 #import "DSynthAdditions.h"
 
 
-@interface SynthManager : NSObject {
+@interface SynthManager : NSObject <PdListener> {
     PdDispatcher *dispatcher;
 
 }

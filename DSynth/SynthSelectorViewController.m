@@ -1,21 +1,17 @@
 //
-//  TuningSelectorViewController.m
+//  SynthSelectorViewController.m
 //  DSynth
 //
-//  Created by David Kendall on 8/21/12.
+//  Created by David Kendall on 9/5/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "TuningSelectorViewController.h"
+#import "SynthSelectorViewController.h"
 
-#pragma mark -
+@implementation SynthSelectorViewController
 
-@implementation TuningSelectorViewController
-
-@synthesize tunings = _tunings;
 @synthesize delegate = _delegate;
-
-#pragma mark inherited methods
+@synthesize synthPresets = _synthPresets;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -29,19 +25,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     // Uncomment the following line to preserve selection between presentations.
     self.clearsSelectionOnViewWillAppear = NO;
     self.contentSizeForViewInPopover = CGSizeMake(280.0, 450.0);
     
-    NSArray *factoryTunings = [[NSArray alloc] initWithObjects:@"Partch 11-limit", 
-                               @"15-limit sequential",
-                               @"15-limit odd numbers",
-                               nil];
-    NSArray *userTunings = [[NSMutableArray alloc] initWithObjects:@"foo", nil];
-    headers = [[NSArray alloc] initWithObjects:@"Factory", @"User", nil];
-    self.tunings = [[NSMutableArray alloc] initWithObjects:factoryTunings, userTunings, nil];
- 
+    self.synthPresets = [[NSMutableArray alloc] initWithObjects:@"Accordion", @"\"Flute\"", @"Other", nil];
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
@@ -58,17 +48,18 @@
 	return YES;
 }
 
-#pragma mark Table view data source
+#pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self.tunings count];
+    // Return the number of sections.
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSArray *sectionList = [self.tunings objectAtIndex:section];
-    return [sectionList count];
+    // Return the number of rows in the section.
+    return [self.synthPresets count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -79,20 +70,12 @@
     // Configure the cell...
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"tuning"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"synth"];
     }
-    
-    //NSLog(@"%i, %i l: %i", [indexPath indexAtPosition:0], [indexPath indexAtPosition:1], [indexPath length]);
-    
-    NSArray *tuningList = [self.tunings objectAtIndex:indexPath.section];
-    NSString *tuning = [tuningList objectAtIndex:indexPath.row];
-    cell.textLabel.text = tuning;
+    NSString *cellLabel = [self.synthPresets objectAtIndex:indexPath.row];
+    cell.textLabel.text = cellLabel;
     
     return cell;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [headers objectAtIndex:section];
 }
 
 /*
@@ -134,15 +117,14 @@
 }
 */
 
-#pragma mark Table view delegate
+#pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // Navigation logic may go here. Create and push another view controller.
     if (self.delegate != nil) {
-        NSArray *userTunings = [self.tunings objectAtIndex:indexPath.section];
-        NSString *tuning = [userTunings objectAtIndex:indexPath.row];
-        
-        [self.delegate tuningSelected:tuning];
+        NSString *synth = [self.synthPresets objectAtIndex:indexPath.row];
+        [self.delegate synthSelected:synth];
     }
 }
 

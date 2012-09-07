@@ -24,6 +24,9 @@
 
 @synthesize tuningSelect = _tuningSelect;
 @synthesize tuningSelectPopover = _tuningSelectPopover;
+@synthesize synthSelect = _synthSelect;
+@synthesize synthSelectPopover = _synthSelectPopover;
+
 @synthesize pitchField = _pitchField;
 @synthesize numStepsField = _numStepsField;
 
@@ -339,6 +342,18 @@
 
 #pragma mark ibactions
 
+- (IBAction)setSynthButtonTapped:(id)sender {
+    if (self.synthSelect == nil) {
+        self.synthSelect = [[SynthSelectorViewController alloc] initWithStyle:UITableViewStylePlain];
+        self.synthSelect.delegate = self;
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.synthSelect];
+        self.synthSelect.navigationItem.title = @"Synth";
+        
+        self.synthSelectPopover = [[UIPopoverController alloc] initWithContentViewController:navController];
+    }
+    [self.synthSelectPopover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+}
+
 - (IBAction)setTuningButtonTapped:(id)sender {
     if (self.tuningSelect == nil) {
         // initialize the tuning select popover
@@ -449,14 +464,15 @@
 
 #pragma mark delegate methods
 
+- (void)synthSelected:(NSString *)synth {
+    NSLog(@"this is my synth %@", synth);
+    [self.synthSelectPopover dismissPopoverAnimated:YES];
+}
+
 - (void)savePromptView:(SavePromptView *)saveView clickedButtonAtIndex:(NSInteger)buttonIndex {
     NSLog(@"pressed button %d title %@", buttonIndex, [saveView enteredText]);
     [self.tuningSelectPopover dismissPopoverAnimated:YES];
     //[self.settingsManager savePresetWithName:@"test"];
-}
-
--(void)tuningPopoverFinished {
-    [self.tuningSelectPopover dismissPopoverAnimated:YES];
 }
 
 - (void)saveButtonPressed {
@@ -473,6 +489,7 @@
 
 - (void)tuningSelected:(NSString *)tuning {
     NSLog(@"this is my tuning %@", tuning);
+    [self.tuningSelectPopover dismissPopoverAnimated:YES];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {

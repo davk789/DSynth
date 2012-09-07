@@ -65,7 +65,11 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="jU2-6a-Zln"/>
-                                    <barButtonItem title="Synth" id="Kr0-UW-gSz"/>
+                                    <barButtonItem title="Synth" id="Kr0-UW-gSz">
+                                        <connections>
+                                            <action selector="setSynthButtonTapped:" destination="2" id="pZz-dV-e1M"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="num steps:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="RdV-oL-0gH">
@@ -120,6 +124,7 @@
                 <relationship kind="action" name="pitchNoteNumSet:"/>
                 <relationship kind="action" name="pitchOctaveDownTapped:"/>
                 <relationship kind="action" name="pitchOctaveUpTapped:"/>
+                <relationship kind="action" name="setSynthButtonTapped:"/>
                 <relationship kind="action" name="setTuningButtonTapped:"/>
                 <relationship kind="outlet" name="numStepsField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="pitchField" candidateClass="UITextField"/>

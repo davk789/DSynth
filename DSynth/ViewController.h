@@ -10,10 +10,11 @@
 #import "SynthManager.h"
 #import "SettingsManager.h"
 #import "TuningSelectorViewController.h"
+#import "SynthSelectorViewController.h"
 #import "DSynthAdditions.h"
 #import "SavePromptView.h"
 
-@interface ViewController : UIViewController <TuningSelectorDelegate, UITextFieldDelegate, SettingsManagerDelegate, SavePromptViewDelegate> {
+@interface ViewController : UIViewController <TuningSelectorDelegate, SynthSelectorDelegate, UITextFieldDelegate, SettingsManagerDelegate, SavePromptViewDelegate> {
     NSMutableArray *keyViews;
     NSMutableArray *keyLabels;
     NSMutableArray *activeTouches;
@@ -22,6 +23,9 @@
 
 @property (strong, nonatomic) TuningSelectorViewController *tuningSelect;
 @property (strong, nonatomic) UIPopoverController *tuningSelectPopover;
+
+@property (strong, nonatomic) SynthSelectorViewController *synthSelect;
+@property (strong, nonatomic) UIPopoverController *synthSelectPopover;
 
 @property (strong, nonatomic) SynthManager *synthManager;
 @property (strong, nonatomic) SettingsManager *settingsManager;
@@ -39,6 +43,7 @@
 - (void)keyDown:(NSNumber *)num;
 - (void)keyUp:(NSNumber *)num;
 
+- (IBAction)setSynthButtonTapped:(id)sender;
 - (IBAction)setTuningButtonTapped:(id)sender;
 - (IBAction)pitchOctaveUpTapped:(id)sender;
 - (IBAction)pitchOctaveDownTapped:(id)sender;

@@ -10,7 +10,6 @@
 
 @protocol TuningSelectorDelegate
 - (void)tuningSelected:(NSString *)tuning;
-- (void)tuningPopoverFinished;
 @end
 
 @interface TuningSelectorViewController : UITableViewController {
