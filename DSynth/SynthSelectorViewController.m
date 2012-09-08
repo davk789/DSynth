@@ -30,7 +30,7 @@
     self.clearsSelectionOnViewWillAppear = NO;
     self.contentSizeForViewInPopover = CGSizeMake(280.0, 450.0);
     
-    self.synthPresets = [[NSMutableArray alloc] initWithObjects:@"Accordion", @"\"Flute\"", @"Other", nil];
+    //self.synthPresets = [[NSMutableArray alloc] initWithObjects:@"Clarinet", @"Oboe", @"Bell", nil];
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;

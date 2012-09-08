@@ -12,6 +12,7 @@
 @synthesize activeNotes = _activeNotes;
 @synthesize scaleGen = _scaleGen;
 @synthesize centerPitch = _centerPitch;
+@synthesize synthPresets = _synthPresets;
 
 - (id)init {
     self = [super init];
@@ -27,18 +28,132 @@
 
         self.activeNotes = [[NSMutableArray alloc] init];
         self.centerPitch = [NSNumber numberWithFloat:60.0];
+        self.synthPresets = [[NSMutableDictionary alloc] init];
         dispatcher = [[PdDispatcher alloc] init];
         [PdBase setDelegate:dispatcher];
-        [dispatcher addListener:self forSource:@"test"];
+//        [dispatcher addListener:self forSource:@"test"];
         void *patch = [PdBase openFile:@"dsynth.pd" path:[[NSBundle mainBundle] resourcePath]];
         if (!patch) {
             NSLog(@"failed to open patch");
         }
         
     }
+    [self initSynthPresets];
     
     return self;
 }
+
+- (void)initSynthPresets {
+    NSDictionary *clarinet = [[NSDictionary alloc]
+                              initWithObjectsAndKeys:
+                              [NSNumber numberWithFloat:0.0],
+                              @"aa",
+                              [NSNumber numberWithFloat:85.0],
+                              @"ab",
+                              [NSNumber numberWithFloat:65.0],
+                              @"ac",
+                              [NSNumber numberWithFloat:0.0],
+                              @"ba",
+                              [NSNumber numberWithFloat:0.0],
+                              @"bb",
+                              [NSNumber numberWithFloat:0.0],
+                              @"bc",
+                              [NSNumber numberWithFloat:0.0],
+                              @"ca",
+                              [NSNumber numberWithFloat:0.0],
+                              @"cb",
+                              [NSNumber numberWithFloat:0.0],
+                              @"cc",
+                              [NSNumber numberWithFloat:0.5],
+                              @"trA",
+                              [NSNumber numberWithFloat:1.0],
+                              @"trB",
+                              [NSNumber numberWithFloat:3.0],
+                              @"trC",
+                              [NSNumber numberWithFloat:42.0],
+                              @"att",
+                              [NSNumber numberWithFloat:235.0],
+                              @"dec",
+                              [NSNumber numberWithFloat:0.7],
+                              @"sus",
+                              [NSNumber numberWithFloat:235.0],
+                              @"rel",
+                              nil];
+    [self.synthPresets setObject:clarinet forKey:@"Clarinet"];
+    
+    NSDictionary *oboe = [[NSDictionary alloc]
+                              initWithObjectsAndKeys:
+                              [NSNumber numberWithFloat:0.0],
+                          @"aa",
+                              [NSNumber numberWithFloat:95.0],
+                          @"ab",
+                              [NSNumber numberWithFloat:100.0],
+                          @"ac",
+                              [NSNumber numberWithFloat:0.0],
+                          @"ba",
+                              [NSNumber numberWithFloat:0.0],
+                          @"bb",
+                              [NSNumber numberWithFloat:0.0],
+                          @"bc",
+                              [NSNumber numberWithFloat:0.0],
+                          @"ca",
+                              [NSNumber numberWithFloat:500.0],
+                          @"cb",
+                              [NSNumber numberWithFloat:0.0],
+                          @"cc",
+                              [NSNumber numberWithFloat:1.0],
+                          @"trA",
+                              [NSNumber numberWithFloat:1.0],
+                          @"trB",
+                              [NSNumber numberWithFloat:1.5],
+                          @"trC",
+                              [NSNumber numberWithFloat:44.0],
+                          @"att",
+                              [NSNumber numberWithFloat:114.0],
+                          @"dec",
+                              [NSNumber numberWithFloat:0.7],
+                          @"sus",
+                              [NSNumber numberWithFloat:193.0],
+                          @"rel",
+                          nil];
+    [self.synthPresets setObject:oboe forKey:@"Oboe"];
+
+    NSDictionary *bell = [[NSDictionary alloc]
+                          initWithObjectsAndKeys:
+                          [NSNumber numberWithFloat:0.0],
+                          @"aa",
+                          [NSNumber numberWithFloat:119.0],
+                          @"ab",
+                          [NSNumber numberWithFloat:52.0],
+                          @"ac",
+                          [NSNumber numberWithFloat:0.0],
+                          @"ba",
+                          [NSNumber numberWithFloat:0.0],
+                          @"bb",
+                          [NSNumber numberWithFloat:0.0],
+                          @"bc",
+                          [NSNumber numberWithFloat:0.0],
+                          @"ca",
+                          [NSNumber numberWithFloat:44.0],
+                          @"cb",
+                          [NSNumber numberWithFloat:0.0],
+                          @"cc",
+                          [NSNumber numberWithFloat:1.0],
+                          @"trA",
+                          [NSNumber numberWithFloat:2.97],
+                          @"trB",
+                          [NSNumber numberWithFloat:4.243],
+                          @"trC",
+                          [NSNumber numberWithFloat:15.0],
+                          @"att",
+                          [NSNumber numberWithFloat:2000.0],
+                          @"dec",
+                          [NSNumber numberWithFloat:0.0],
+                          @"sus",
+                          [NSNumber numberWithFloat:200.0],
+                          @"rel",
+                          nil];
+    [self.synthPresets setObject:bell forKey:@"Bell"];}
 
 - (void)setCenterPitch:(NSNumber *)centerPitch {
     _centerPitch = centerPitch;
@@ -105,15 +220,19 @@
     [self sendScaleToPd];
 }
 
-#pragma mark PdDispatcher delegate methods
-
-- (void)receiveFloat:(float)received fromSource:(NSString *)source {
-    NSLog(@"received %@ %f", source, received);
+- (void)loadSynthPresetNamed:(NSString *)name {
+    NSDictionary *preset = [self.synthPresets objectForKey:name];
+    if (preset != nil) {
+        NSLog(@"sending the preset for %@", name);
+        for (NSString *key in [preset allKeys]) {
+            NSLog(@"getting param key %@", key);
+            float val = [[preset objectForKey:key] floatValue];
+            [PdBase sendFloat:val toReceiver:key];
+        }
+    }
+    else {
+        NSLog(@"couldn't get the preset");
+    }
 }
-
-- (void)receiveList:(NSArray *)list fromSource:(NSString *)source {
-    NSLog(@"received %@ %@", source, list);
-}
-
 
 @end

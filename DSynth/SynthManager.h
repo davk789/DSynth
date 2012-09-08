@@ -11,18 +11,21 @@
 #import "DSynthAdditions.h"
 
 
-@interface SynthManager : NSObject <PdListener> {
+@interface SynthManager : NSObject {
     PdDispatcher *dispatcher;
-
 }
 
 @property (strong, nonatomic) NSMutableArray *activeNotes;
 @property (strong, nonatomic) NSMutableArray *scaleGen;
+@property (strong, nonatomic) NSMutableDictionary *synthPresets;
 @property (strong, nonatomic) NSNumber *centerPitch;
 
 - (void)sendScaleToPd;
 - (void)noteOn:(int)noteNum;
 - (void)noteOff:(int)noteNum;
 - (void)setScaleGenValue:(NSNumber *)value atIndex:(NSUInteger)index;
+
+- (void)loadSynthPresetNamed:(NSString *)name;
+- (void)initSynthPresets;
 
 @end

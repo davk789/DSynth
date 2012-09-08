@@ -346,6 +346,8 @@
     if (self.synthSelect == nil) {
         self.synthSelect = [[SynthSelectorViewController alloc] initWithStyle:UITableViewStylePlain];
         self.synthSelect.delegate = self;
+        self.synthSelect.synthPresets = [[NSMutableArray alloc] initWithArray:[self.synthManager.synthPresets allKeys]];
+        
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.synthSelect];
         self.synthSelect.navigationItem.title = @"Synth";
         
@@ -465,7 +467,7 @@
 #pragma mark delegate methods
 
 - (void)synthSelected:(NSString *)synth {
-    NSLog(@"this is my synth %@", synth);
+    [self.synthManager loadSynthPresetNamed:synth];
     [self.synthSelectPopover dismissPopoverAnimated:YES];
 }
 
