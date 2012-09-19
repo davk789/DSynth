@@ -12,7 +12,7 @@
 
 #import "ViewController.h"
 
-#pragma mark - additions
+#define EDIT_MODE NO
 
 
 #pragma mark -
@@ -28,6 +28,8 @@
 @synthesize synthSelectPopover = _synthSelectPopover;
 
 @synthesize pitchField = _pitchField;
+@synthesize pitchSequenceLabel = _pitchSequenceLabel;
+@synthesize numStepsLabel = _numStepsLabel;
 @synthesize numStepsField = _numStepsField;
 
 @synthesize toolbar = _toolbar;
@@ -91,6 +93,10 @@
 #pragma mark view creation methods
 
 - (void)makeScaleGenTextFields:(NSArray *)gen {
+    if (!EDIT_MODE) {
+        return;
+    }
+    
     if ([tuningTextFields count] > 0) {
         for (UITextField *text in tuningTextFields) {
             [text removeFromSuperview];
@@ -302,6 +308,13 @@
     [self generateKeysFromScaleGen:self.synthManager.scaleGen];
     // create the scale sequence text boxes
     [self makeScaleGenTextFields:self.synthManager.scaleGen];
+    if (!EDIT_MODE) {
+        self.numStepsField.hidden = YES;
+        self.numStepsLabel.hidden = YES;
+        self.pitchSequenceLabel.hidden = YES;
+    }
+
+
     
     // initialize the settings manager
     
@@ -324,7 +337,8 @@
         // iOS 4.x-
         [self.toolbar insertSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title-bar.png"]] atIndex:0];
     }
-
+    
+    // hide the 
 }
 
 
@@ -361,6 +375,7 @@
         // initialize the tuning select popover
         
         self.tuningSelect = [[TuningSelectorViewController alloc]  initWithStyle:UITableViewStylePlain];
+
         self.tuningSelect.delegate = self;
 
         // build the navigation controller
@@ -450,9 +465,7 @@
         
         self.synthManager.scaleGen = scaleGen;
         [self.synthManager sendScaleToPd];
-        
-        NSLog(@"this is the new scalegen %@", self.synthManager.scaleGen);
-        
+            
         [self generateKeysFromScaleGen:self.synthManager.scaleGen];
         [self makeScaleGenTextFields:self.synthManager.scaleGen];
         
@@ -472,9 +485,8 @@
 }
 
 - (void)savePromptView:(SavePromptView *)saveView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    NSLog(@"pressed button %d title %@", buttonIndex, [saveView enteredText]);
+    [self.settingsManager savePresetWithName:[saveView enteredText]];
     [self.tuningSelectPopover dismissPopoverAnimated:YES];
-    //[self.settingsManager savePresetWithName:@"test"];
 }
 
 - (void)saveButtonPressed {
@@ -489,8 +501,46 @@
     NSLog(@"edit button pressed");
 }
 
-- (void)tuningSelected:(NSString *)tuning {
-    NSLog(@"this is my tuning %@", tuning);
+- (void)userTuningSelected:(NSString *)tuning {
+    NSLog(@"this is the user tuning %@", tuning);
+    [self.tuningSelectPopover dismissPopoverAnimated:YES];
+}
+
+- (void)factoryTuningSelected:(NSString *)tuning {
+    NSLog(@"this is the factory tuning %@ these are the keys %@", tuning, [self.settingsManager.factoryPresets allKeys]);
+    NSDictionary *data = [self.settingsManager.factoryPresets objectForKey:tuning];
+    if (data != nil) {
+        // scale
+        NSMutableArray *scaleGen = (NSMutableArray *)[data objectForKey:@"tuningSeq"];
+        if (scaleGen != nil) {
+            self.synthManager.scaleGen = scaleGen;
+            [self.synthManager sendScaleToPd];
+            [self generateKeysFromScaleGen:self.synthManager.scaleGen];
+            [self makeScaleGenTextFields:self.synthManager.scaleGen];
+            
+            self.numStepsField.text = [NSString stringWithFormat:@"%.2f", [scaleGen count]];
+        }
+        else {
+            NSLog(@"Could not set the scale.");
+        }
+        
+        // center pitch
+        NSNumber *pitch = [data objectForKey:@"centerPitch"];
+        if (pitch != nil) {
+            self.synthManager.centerPitch = pitch;
+            self.pitchField.text = [NSString stringWithFormat:@"%.2f", [pitch floatValue], nil];
+        }
+        
+        // patch
+        NSString *synth = [data objectForKey:@"synth"];
+        if (synth != nil) {
+            [self.synthManager loadSynthPresetNamed:synth];
+        }
+    }    
+    else {
+        NSLog(@"Could not retrieve the factory preset.");
+    }
+    
     [self.tuningSelectPopover dismissPopoverAnimated:YES];
 }
 
@@ -510,7 +560,7 @@
     }
 }
 
-- (NSDictionary *)givePresetData {
+- (NSDictionary *)yieldPresetData {
     NSArray *keys = [[NSArray alloc] initWithObjects:@"tuningSeq", @"numSteps", @"centerPitch", nil];
     
     // values
@@ -524,18 +574,22 @@
     // num steps
     NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
     f.numberStyle = NSNumberFormatterDecimalStyle;
-    NSNumber *val = [f numberFromString:[self.numStepsField text]];
-    if (val != nil) {
-        [values addObject:val];
-    }
+
     // center pitch
     NSNumber *center = [f numberFromString:[self.pitchField text]];
-    if (val != nil) {
+    if (center != nil) {
         [values addObject:center];
     }
     
+    // *** need to add the synth preset here too.
+    
     NSMutableDictionary *result = [NSMutableDictionary dictionaryWithObjects:values forKeys:keys];
     return result;
+}
+
+- (void)pushPresetData:(NSDictionary *)data {
+    // unpack the preset data and push it to the view
+    // tuningSeq centerPitch synth are the dictionary keys to check here
 }
 
 @end

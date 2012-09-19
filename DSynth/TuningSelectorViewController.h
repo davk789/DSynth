@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @protocol TuningSelectorDelegate
-- (void)tuningSelected:(NSString *)tuning;
+- (void)userTuningSelected:(NSString *)tuning;
+- (void)factoryTuningSelected:(NSString *)tuning;
 @end
 
 @interface TuningSelectorViewController : UITableViewController {

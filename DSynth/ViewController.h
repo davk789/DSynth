@@ -32,6 +32,8 @@
 
 @property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (strong, nonatomic) IBOutlet UITextField *pitchField;
+@property (strong, nonatomic) IBOutlet UILabel *pitchSequenceLabel;
+@property (strong, nonatomic) IBOutlet UILabel *numStepsLabel;
 @property (strong, nonatomic) IBOutlet UITextField *numStepsField;
 
 - (void)generateKeysFromScaleGen:(NSArray *)gen;

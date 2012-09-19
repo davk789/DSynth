@@ -34,16 +34,15 @@
     self.clearsSelectionOnViewWillAppear = NO;
     self.contentSizeForViewInPopover = CGSizeMake(280.0, 450.0);
     
-    NSArray *factoryTunings = [[NSArray alloc] initWithObjects:@"Partch 11-limit", 
-                               @"15-limit sequential",
-                               @"15-limit odd numbers",
+    NSArray *factoryTunings = [[NSArray alloc] initWithObjects:@"Partch", 
+                               @"13 Limit",
+                               @"15 Limit",
+                               @"19 Limit",
                                nil];
     NSArray *userTunings = [[NSMutableArray alloc] initWithObjects:@"foo", nil];
     headers = [[NSArray alloc] initWithObjects:@"Factory", @"User", nil];
     self.tunings = [[NSMutableArray alloc] initWithObjects:factoryTunings, userTunings, nil];
  
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewDidUnload
@@ -139,10 +138,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate != nil) {
-        NSArray *userTunings = [self.tunings objectAtIndex:indexPath.section];
-        NSString *tuning = [userTunings objectAtIndex:indexPath.row];
+        NSArray *tuningSection = [self.tunings objectAtIndex:indexPath.section];
         
-        [self.delegate tuningSelected:tuning];
+        NSString *tuning = [tuningSection objectAtIndex:indexPath.row];
+        
+        if (indexPath.section == 0) {
+            [self.delegate factoryTuningSelected:tuning];
+        }
+        else {
+            [self.delegate userTuningSelected:tuning];
+        }
+
     }
 }
 

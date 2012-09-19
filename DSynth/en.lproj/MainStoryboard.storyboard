@@ -109,7 +109,9 @@
                     </view>
                     <connections>
                         <outlet property="numStepsField" destination="LTw-Ty-Ph4" id="eL8-Nk-VRU"/>
+                        <outlet property="numStepsLabel" destination="RdV-oL-0gH" id="svD-vh-FJ4"/>
                         <outlet property="pitchField" destination="ncW-CD-cf4" id="hIz-b8-GpW"/>
+                        <outlet property="pitchSequenceLabel" destination="1zm-Kt-FME" id="RpA-Kc-qLE"/>
                         <outlet property="toolbar" destination="gdh-y6-9kn" id="QjH-ZO-aVd"/>
                     </connections>
                 </viewController>
@@ -127,7 +129,9 @@
                 <relationship kind="action" name="setSynthButtonTapped:"/>
                 <relationship kind="action" name="setTuningButtonTapped:"/>
                 <relationship kind="outlet" name="numStepsField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="numStepsLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="pitchField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="pitchSequenceLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
             </relationships>
         </class>

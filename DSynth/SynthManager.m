@@ -210,9 +210,6 @@
             --count;
         }
     }
-    
-    
-    
 }
 
 - (void)setScaleGenValue:(NSNumber *)value atIndex:(NSUInteger)index {
@@ -223,9 +220,7 @@
 - (void)loadSynthPresetNamed:(NSString *)name {
     NSDictionary *preset = [self.synthPresets objectForKey:name];
     if (preset != nil) {
-        NSLog(@"sending the preset for %@", name);
         for (NSString *key in [preset allKeys]) {
-            NSLog(@"getting param key %@", key);
             float val = [[preset objectForKey:key] floatValue];
             [PdBase sendFloat:val toReceiver:key];
         }
